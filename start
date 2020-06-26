@@ -237,6 +237,13 @@ function init_stellar_core() {
 
 	run_silent "finalize-core-config" sed -ri "s/__PGPASS__/$PGPASS/g" etc/stellar-core.cfg
 
+    # Set this node's private key (secret_seed) if one is pass through an environment variable.
+	if [ -n "$NODE_PRIVATE_KEY" ]; then
+      run_silent "set-private-key" sed -ri "s/__NODE_PRIVATE_KEY__/$NODE_PRIVATE_KEY/g" etc/stellar-core.cfg
+	else
+      echo "set-private-key: will generate randomly"
+	fi
+
 	start_postgres
 
 	run_silent "init-core-db" sudo -u stellar stellar-core new-db --conf etc/stellar-core.cfg
