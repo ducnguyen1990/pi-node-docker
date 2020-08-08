@@ -239,10 +239,10 @@ function init_stellar_core() {
 
     # Set this node's private key (secret_seed) if one is pass through an environment variable.
 	if [ -n "$NODE_PRIVATE_KEY" ]; then
-		run_silent "set-private-key" sed -ri "s/__NODE_PRIVATE_KEY__/$NODE_PRIVATE_KEY/g" etc/stellar-core.cfg
+        run_silent "set-private-key" sed -ri "s/__NODE_PRIVATE_KEY__/$NODE_PRIVATE_KEY/g" $COREHOME/etc/stellar-core.cfg
 	else
-		GENERATED_PRIVATE_KEY=`stellar-core gen-seed | grep seed | awk '{print $3}'`
-    run_silent "set-private-key" sed -ri "s/__NODE_PRIVATE_KEY__/$GENERATED_PRIVATE_KEY/g" etc/stellar-core.cfg
+        GENERATED_PRIVATE_KEY=`stellar-core gen-seed | grep seed | awk '{print $3}'`
+        run_silent "set-private-key" sed -ri "s/__NODE_PRIVATE_KEY__/$GENERATED_PRIVATE_KEY/g" $COREHOME/etc/stellar-core.cfg
 	fi
 
 	start_postgres
