@@ -379,9 +379,6 @@ function configure_s3cmd() {
       exit 1
     fi
 
-		whoami
-		ls -alh ~
-
     # sed the environment variables:
     sed -i "s/HISTORY_BUCKET_ACCESS_KEY/$HISTORY_BUCKET_ACCESS_KEY/" /root/.s3cfg
     sed -i "s/HISTORY_BUCKET_SECRET_KEY/$HISTORY_BUCKET_SECRET_KEY/" /root/.s3cfg
