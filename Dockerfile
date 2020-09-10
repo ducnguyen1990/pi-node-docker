@@ -33,6 +33,14 @@ ADD pubnet /opt/stellar-default/pubnet
 ADD testnet /opt/stellar-default/testnet
 ADD standalone /opt/stellar-default/standalone
 
+# Install s3cmd and its python dependencies (the executable will be /s3cmd/s3cmd)
+RUN apt-get install -y python-dateutil \
+    && wget -O s3cmd.tar.gz https://github.com/s3tools/s3cmd/releases/download/v2.1.0/s3cmd-2.1.0.tar.gz \
+    && tar -zxvf s3cmd.tar.gz \
+    && mv s3cmd-2.1.0 s3cmd
+
+ADD pinetwork/.s3cfg /root/.s3cfg
+
 
 ADD start /
 RUN ["chmod", "+x", "start"]

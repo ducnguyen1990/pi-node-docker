@@ -35,6 +35,8 @@ function main() {
 	init_horizon
 	copy_pgpass
 
+	configure_s3cmd
+
 	stop_postgres  # this gets started in init_db
 
 	# launch services
@@ -363,6 +365,70 @@ function stop_postgres() {
 		sleep 0.5
 	done
 	echo "postgres: down"
+}
+
+function configure_s3cmd() {
+  if _handle_string_bool "PUT_HISTORY_CDN" "${PUT_HISTORY_CDN}"; then
+    if [ -z "$HISTORY_BUCKET_ACCESS_KEY" ]; then
+      echo "HISTORY_BUCKET_ACCESS_KEY is a required environment variable when PUT_HISTORY_CDN is truthy. Aborting."
+      exit 1
+    fi
+
+    if [ -z "$HISTORY_BUCKET_SECRET_KEY" ]; then
+      echo "HISTORY_BUCKET_SECRET_KEY is a required environment variable when PUT_HISTORY_CDN is truthy. Aborting."
+      exit 1
+    fi
+
+		whoami
+		ls -alh ~
+
+    # sed the environment variables:
+    sed -i "s/HISTORY_BUCKET_ACCESS_KEY/$HISTORY_BUCKET_ACCESS_KEY/" /root/.s3cfg
+    sed -i "s/HISTORY_BUCKET_SECRET_KEY/$HISTORY_BUCKET_SECRET_KEY/" /root/.s3cfg
+
+		# enable the stellar user to use s3cmd as well:
+		cp /root/.s3cfg /home/stellar && chown stellar:stellar /home/stellar/.s3cfg
+  fi
+}
+
+
+##
+# _handle_string_bool: Handles a string value which contains either "true" or "false" and returns a truthy or
+# falsy shell exit code (0 == true, 1 == false)
+# Usage:
+#   With if/else/fi:
+#     if _handle_string_bool EARTH_IS_FLAT ${EARTH_IS_FLAT}; then echo "Don't fall off\!"; else echo "Smart\!"; fi
+#   One-liner form:
+#     _handle_string_bool EARTH_IS_FLAT ${EARTH_IS_FLAT} && echo "Don't fall off\!" || echo "Smart\!"
+#
+function _handle_string_bool() {
+  if [ -z $1 ]; then
+    echo 'ERR: _handle_string_bool expects the name of the variable being handled as a first argument.'
+    echo '     USAGE: _handle_string_bool VAR_NAME ${VAR_NAME}'
+    echo '     Exiting.'
+    
+    exit 1
+  else
+    name=$1
+  fi
+
+  value=$2
+
+  if [ -z "${value}" ]; then
+    echo "Notice: ${name} is unset or empty. Assuming falsy."
+    return 1
+  fi
+
+  if [ "${value}" = "false" ]; then
+    return 1
+  fi
+
+  if [ "${value}" = "true" ]; then
+    return 0
+  fi
+
+  echo "Notice: ${name} is defined, but its value is neither 'true' or 'false'. Assuming truthy."
+  return 0
 }
 
 pushd () {
