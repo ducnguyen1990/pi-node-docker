@@ -256,8 +256,8 @@ function init_stellar_core() {
 
 		run_silent "init-history" sudo -u stellar stellar-core new-hist local --conf $COREHOME/etc/stellar-core.cfg
 		# Start local history server
-		mkdir -p /history/vs:
-		pushd /history/vs
+		mkdir -p /opt/stellar/history # XXX chown the dir? it should belong to stellar (?)
+		pushd /opt/stellar/history
 		webfsd -F -p 1570 > /dev/null 2>&1 &
 		popd
 	fi
