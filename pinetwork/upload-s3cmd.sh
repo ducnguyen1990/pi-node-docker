@@ -3,7 +3,7 @@
 SOURCE=$1
 TARGET=$2
 
-if [[ "$TARGET" == */.well-known/stellar-history.json ]]; then
+if [[ "$TARGET" == *.well-known/stellar-history.json ]]; then
   # History manifest: we need to prevent this file from being cached.
 
   echo "upload-s3cmd: stellar-history.json -> upload with no cache"
