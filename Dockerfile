@@ -40,6 +40,7 @@ RUN apt-get install -y python-dateutil \
     && mv s3cmd-2.1.0 s3cmd
 
 ADD pinetwork/.s3cfg /root/.s3cfg
+ADD pinetwork/upload-s3cmd.sh /home/stellar/upload-s3cmd.sh
 
 
 ADD start /
