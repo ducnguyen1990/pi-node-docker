@@ -309,8 +309,7 @@ function exec_supervisor() {
 	exec supervisord -n -c $SUPHOME/etc/supervisord.conf
 }
 
-# run_silent is a utility function that runs a command with an abbreviated
-# output provided it succeeds.
+# run_silent is a utility function that runs a command with an abbreviated output provided it succeeds.
 function run_silent() {
 	local LABEL=$1
 	shift
