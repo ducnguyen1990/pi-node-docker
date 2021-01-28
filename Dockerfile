@@ -1,14 +1,13 @@
-FROM stellar/base:latest
+FROM ubuntu:16.04
 
 MAINTAINER Bartek Nowotarski <bartek@stellar.org>
 
-ENV STELLAR_CORE_VERSION 12.4.0-1170-c47415d4
-ENV HORIZON_VERSION 1.0.0
+ENV STELLAR_CORE_VERSION 15.2.0-440.54b03f7.xenial
+ENV HORIZON_VERSION 1.13.1-94
 
 EXPOSE 5432
 EXPOSE 8000
-EXPOSE 11625
-EXPOSE 11626
+EXPOSE 31402
 
 ADD dependencies /
 RUN ["chmod", "+x", "dependencies"]
@@ -20,10 +19,6 @@ RUN /install
 
 RUN ["mkdir", "-p", "/opt/stellar"]
 RUN ["touch", "/opt/stellar/.docker-ephemeral"]
-
-RUN useradd --uid 10011001 --home-dir /home/stellar --no-log-init stellar \
-    && mkdir -p /home/stellar \
-    && chown -R stellar:stellar /home/stellar
 
 RUN ["ln", "-s", "/opt/stellar", "/stellar"]
 RUN ["ln", "-s", "/opt/stellar/core/etc/stellar-core.cfg", "/stellar-core.cfg"]
@@ -46,4 +41,4 @@ ADD pinetwork/upload-s3cmd.sh /home/stellar/upload-s3cmd.sh
 ADD start /
 RUN ["chmod", "+x", "start"]
 
-ENTRYPOINT ["/init", "--", "/start" ]
+ENTRYPOINT ["/start"]
