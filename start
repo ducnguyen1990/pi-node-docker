@@ -10,7 +10,7 @@ export HZHOME="$STELLAR_HOME/horizon"
 export HISTHOME="$STELLAR_HOME/history"
 export LOCALHIST="$HISTHOME/local"
 
-export PGBIN="/usr/lib/postgresql/9.5/bin"
+export PGBIN="/usr/lib/postgresql/12/bin"
 export PGDATA="$PGHOME/data"
 export PGUSER="stellar"
 export PGPORT=5432
